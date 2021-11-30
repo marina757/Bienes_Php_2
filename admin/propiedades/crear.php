@@ -105,21 +105,24 @@
             //SUBIDA DE ARCHIVOS
 
             //CREAR CARPETA
-            $carpetaImagenes = '../../imagenes';
+            $carpetaImagenes = '../../imagenes/';
 
             if (!is_dir($carpetaImagenes)) { //is_dir nos retorna si carpeta existe o no existe   
                 mkdir($carpetaImagenes);
             }
 
-            //SUBIR IMAGEN
+            //GENERAR UN NOMBRE UNICO
+            $nombreImagen = md5( uniqid( rand(), true ) ). ".jpg";
 
-            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . "/archivo.jpg");
-            exit;
+
+            //SUBIR IMAGEN
+            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
+            // exit;
             
             //INSERTAR EN BASE DE DATOS
-            $query = " INSERT INTO propiedades (titulo, precio, descripcion,
+            $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion,
             habitaciones, wc, estacionamiento, creado, vendedorId ) VALUES ( '$titulo',
-            '$precio','$descripcion','$habitaciones','$wc','$estacionamiento', '$creado',
+            '$precio', '$nombreImagen','$descripcion','$habitaciones','$wc','$estacionamiento', '$creado',
             '$vendedorId' ) ";
 
             // echo $query;
