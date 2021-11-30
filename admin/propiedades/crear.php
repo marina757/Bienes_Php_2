@@ -2,6 +2,12 @@
     //BASE DE DATOS
     require '../../includes/config/database.php';
     $db = conectarDB();
+    
+    //CONSULTAR PARA OBTENER LOS VENDEDORES
+    $consulta = "SELECT * FROM vendedores";
+    $resultado = mysqli_query($db, $consulta);
+    
+    
     // var_dump($db);
 
     // echo "<pre>";
@@ -22,6 +28,7 @@
     $wc ='';
     $estacionamiento = '';
     $vendedorId = '';
+    $creado = date('Y/m/d');
 
     //EJECUTA CODIGO DESPUES DE QUE USUARIO ENVIA FORMULARIO
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -75,8 +82,8 @@
         if (empty($errores)) {
                 //INSERTAR EN BASE DE DATOS
             $query = " INSERT INTO propiedades (titulo, precio, descripcion,
-            habitaciones, wc, estacionamiento, vendedorId ) VALUES ( '$titulo',
-            '$precio','$descripcion','$habitaciones','$wc','$estacionamiento',
+            habitaciones, wc, estacionamiento, creado, vendedorId ) VALUES ( '$titulo',
+            '$precio','$descripcion','$habitaciones','$wc','$estacionamiento', '$creado',
             '$vendedorId' ) ";
 
             // echo $query;
@@ -84,7 +91,11 @@
             $resultado = mysqli_query($db, $query);
 
             if ($resultado) {
-                echo "insertado correctamente";
+                //REDIRECCIONAR AL USUARIO
+
+                header('Location: /admin'); //header sirve pare redireccionar a un usuario,
+                                            // para enviar datos por enmedio del encabezado 
+                                            //de un stio web, de la peticion
             }    
         }
     }
@@ -139,8 +150,15 @@
 
                 <select name="vendedor">
                     <option value="">-- Seleccione --</option>
+                    <?php while ($vendedor = mysqli_fetch_assoc($resultado) ):  ?>
+                        <option <?php echo $vendedorId === $vendedor['id'] ? 'selected' : ''; ?>  value="<?php echo $vendedor['id']; ?>"> <?php echo $vendedor['nombre'] . " " . $vendedor['apellido']; ?></option>
+                    <?php endwhile; ?>
+                    
+                    
+                    <!-- EJEMPLO PARA POCOS VENDEDORES
                     <option value="1">Marina</option>
                     <option value="2">Karen</option>
+                     -->
                 </select>
             </fieldset>
 
