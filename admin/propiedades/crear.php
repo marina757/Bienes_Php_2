@@ -32,9 +32,15 @@
 
     //EJECUTA CODIGO DESPUES DE QUE USUARIO ENVIA FORMULARIO
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // echo "<pre>";
-        // var_dump($_POST);
-        // echo "</pre>";
+        //  echo "<pre>";
+        //  var_dump($_POST); //nos trae inf cuando mandamos peticion post en form
+        //  echo "</pre>";
+
+        //  echo "<pre>";
+        //  var_dump($_FILES); //permite ver contenido de archivos
+        //  echo "</pre>";
+
+        //  exit;
 
         $titulo = mysqli_real_escape_string( $db, $_POST['titulo']);
         $precio = mysqli_real_escape_string( $db, $_POST['precio']);
@@ -43,6 +49,11 @@
         $wc = mysqli_real_escape_string( $db, $_POST['wc']);
         $estacionamiento = mysqli_real_escape_string( $db, $_POST['estacionamiento']);
         $vendedorId = mysqli_real_escape_string( $db, $_POST['vendedor']);
+        $creado = date('Y/m/d');
+
+        //ASIGNAR FILES HACIA UNA VARIABLE
+        $imagen = $_FILES['imagen'];
+        
 
         if (!$titulo) {
             $errores[] = "Debes poner un titulo";
@@ -70,6 +81,17 @@
 
         if (!$vendedorId) {
             $errores[] = "Elige un vendedor";
+        }
+
+        if (!$imagen['name'] || $imagen['error']) {
+            $errores[] = "la imagen es obligatoria";
+        }
+
+        //VALIDAR POR TAMANO 100kb MAXIMO
+        $medida = 1000 * 100; //lo convierte de bytes a kb
+
+        if ($imagen['size'] > $medida) {
+            $errores[] = "La imagen es muy pesada";
         }
 
         // echo "<pre>";
@@ -115,7 +137,7 @@
             </div>            
         <?php endforeach; ?>
 
-        <form class="formulario" method="POST" action="/admin/propiedades/crear.php">
+        <form class="formulario" method="POST" action="/admin/propiedades/crear.php" enctype="multipart/form-data">
             <fieldset>
                 <legend>Informacion General</legend>
 
@@ -126,7 +148,7 @@
                 <input type="number" id="precio" name="precio" placeholder="Precio Propiedad" value="<?php echo $precio; ?>">
 
                 <label for="imagen">Imagen:</label>
-                <input type="file" id="imagen" accept="image/jpeg, image/png">
+                <input type="file" id="imagen" accept="image/jpeg, image/png" name="imagen">
 
                 <label for="descripcion">Descripcion:</label> 
                 <textarea id="descripcion" name="descripcion"><?php echo $descripcion; ?></textarea>
