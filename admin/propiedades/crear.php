@@ -87,8 +87,8 @@
             $errores[] = "la imagen es obligatoria";
         }
 
-        //VALIDAR POR TAMANO 100kb MAXIMO
-        $medida = 1000 * 100; //lo convierte de bytes a kb
+        //VALIDAR POR TAMANO 1mb MAXIMO
+        $medida = 1000 * 1000; //lo convierte de bytes a kb
 
         if ($imagen['size'] > $medida) {
             $errores[] = "La imagen es muy pesada";
@@ -102,7 +102,21 @@
 
         //REVISAR QUE ARRAY DE ERRORES ESTE VACIO
         if (empty($errores)) {
-                //INSERTAR EN BASE DE DATOS
+            //SUBIDA DE ARCHIVOS
+
+            //CREAR CARPETA
+            $carpetaImagenes = '../../imagenes';
+
+            if (!is_dir($carpetaImagenes)) { //is_dir nos retorna si carpeta existe o no existe   
+                mkdir($carpetaImagenes);
+            }
+
+            //SUBIR IMAGEN
+
+            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . "/archivo.jpg");
+            exit;
+            
+            //INSERTAR EN BASE DE DATOS
             $query = " INSERT INTO propiedades (titulo, precio, descripcion,
             habitaciones, wc, estacionamiento, creado, vendedorId ) VALUES ( '$titulo',
             '$precio','$descripcion','$habitaciones','$wc','$estacionamiento', '$creado',
