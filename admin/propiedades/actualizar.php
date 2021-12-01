@@ -54,9 +54,9 @@
 
     //EJECUTA CODIGO DESPUES DE QUE USUARIO ENVIA FORMULARIO
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
-          echo "<pre>";
-          var_dump($_POST); //nos trae inf cuando mandamos peticion post en form
-          echo "</pre>";
+        //   echo "<pre>";
+        //   var_dump($_POST); //nos trae inf cuando mandamos peticion post en form
+        //   echo "</pre>";
         //   exit; 
 
         //  echo "<pre>";
@@ -122,26 +122,34 @@
 
         //REVISAR QUE ARRAY DE ERRORES ESTE VACIO
         if (empty($errores)) {
-            // //////SUBIDA DE ARCHIVOS/////
 
-            // //CREAR CARPETA
-            // $carpetaImagenes = '../../imagenes/';
+              // //CREAR CARPETA
+              $carpetaImagenes = '../../imagenes/';
 
-            // if (!is_dir($carpetaImagenes)) { //is_dir nos retorna si carpeta existe o no existe   
-            //     mkdir($carpetaImagenes);
-            // }
+              if (!is_dir($carpetaImagenes)) { //is_dir nos retorna si carpeta existe o no existe   
+                  mkdir($carpetaImagenes);
+              }
 
-            // //GENERAR UN NOMBRE UNICO
-            // $nombreImagen = md5( uniqid( rand(), true ) ). ".jpg";
+              $nombreImagen = '';
 
+            ////////SUBIDA DE ARCHIVOS/////
+            if ($imagen['name']) {
+             //ELIMINAR LA IMAGEN PREVIA
+             unlink($carpetaImagenes . $propiedad['imagen']);
 
-            // //SUBIR IMAGEN
-            // move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
-            // // exit;
-            
+              // //GENERAR UN NOMBRE UNICO
+            $nombreImagen = md5( uniqid( rand(), true ) ). ".jpg";
 
+              // //SUBIR IMAGEN
+             move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
+              // // exit;
+            } else {
+                $nombreImagen = $propiedad['imagen'];
+            }
+
+           
             //INSERTAR EN BASE DE DATOS
-            $query = " UPDATE propiedades SET titulo = '${titulo}', precio = '${precio}', descripcion = '${descripcion}',
+            $query = " UPDATE propiedades SET titulo = '${titulo}', precio = '${precio}', imagen = '${nombreImagen}', descripcion = '${descripcion}',
             habitaciones = ${habitaciones}, wc = ${wc}, estacionamiento = ${estacionamiento}, vendedorId = ${vendedorId} WHERE 
             id = ${id} ";
 
