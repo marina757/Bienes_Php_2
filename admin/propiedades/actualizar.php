@@ -54,9 +54,10 @@
 
     //EJECUTA CODIGO DESPUES DE QUE USUARIO ENVIA FORMULARIO
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
-        //  echo "<pre>";
-        //  var_dump($_POST); //nos trae inf cuando mandamos peticion post en form
-        //  echo "</pre>";
+          echo "<pre>";
+          var_dump($_POST); //nos trae inf cuando mandamos peticion post en form
+          echo "</pre>";
+        //   exit; 
 
         //  echo "<pre>";
         //  var_dump($_FILES); //permite ver contenido de archivos
@@ -105,9 +106,6 @@
             $errores[] = "Elige un vendedor";
         }
 
-        if (!$imagen['name'] || $imagen['error']) {
-            $errores[] = "la imagen es obligatoria";
-        }
 
         //VALIDAR POR TAMANO 1mb MAXIMO
         $medida = 1000 * 1000; //lo convierte de bytes a kb
@@ -124,37 +122,37 @@
 
         //REVISAR QUE ARRAY DE ERRORES ESTE VACIO
         if (empty($errores)) {
-            //SUBIDA DE ARCHIVOS
+            // //////SUBIDA DE ARCHIVOS/////
 
-            //CREAR CARPETA
-            $carpetaImagenes = '../../imagenes/';
+            // //CREAR CARPETA
+            // $carpetaImagenes = '../../imagenes/';
 
-            if (!is_dir($carpetaImagenes)) { //is_dir nos retorna si carpeta existe o no existe   
-                mkdir($carpetaImagenes);
-            }
+            // if (!is_dir($carpetaImagenes)) { //is_dir nos retorna si carpeta existe o no existe   
+            //     mkdir($carpetaImagenes);
+            // }
 
-            //GENERAR UN NOMBRE UNICO
-            $nombreImagen = md5( uniqid( rand(), true ) ). ".jpg";
+            // //GENERAR UN NOMBRE UNICO
+            // $nombreImagen = md5( uniqid( rand(), true ) ). ".jpg";
 
 
-            //SUBIR IMAGEN
-            move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
-            // exit;
+            // //SUBIR IMAGEN
+            // move_uploaded_file($imagen['tmp_name'], $carpetaImagenes . $nombreImagen );
+            // // exit;
             
+
             //INSERTAR EN BASE DE DATOS
-            $query = " INSERT INTO propiedades (titulo, precio, imagen, descripcion,
-            habitaciones, wc, estacionamiento, creado, vendedorId ) VALUES ( '$titulo',
-            '$precio', '$nombreImagen','$descripcion','$habitaciones','$wc','$estacionamiento', '$creado',
-            '$vendedorId' ) ";
+            $query = " UPDATE propiedades SET titulo = '${titulo}', precio = '${precio}', descripcion = '${descripcion}',
+            habitaciones = ${habitaciones}, wc = ${wc}, estacionamiento = ${estacionamiento}, vendedorId = ${vendedorId} WHERE 
+            id = ${id} ";
 
             // echo $query;
-
+             
             $resultado = mysqli_query($db, $query);
 
             if ($resultado) {
                 //REDIRECCIONAR AL USUARIO
 
-                header('Location: /admin?resultado=1'); //header sirve pare redireccionar a un usuario,
+                header('Location: /admin?resultado=2'); //header sirve pare redireccionar a un usuario,
                                             // para enviar datos por enmedio del encabezado 
                                             //de un stio web, de la peticion
             }    
@@ -176,7 +174,7 @@
             </div>            
         <?php endforeach; ?>
 
-        <form class="formulario" method="POST" action="/admin/propiedades/crear.php" enctype="multipart/form-data">
+        <form class="formulario" method="POST" enctype="multipart/form-data">
             <fieldset>
                 <legend>Informacion General</legend>
 
