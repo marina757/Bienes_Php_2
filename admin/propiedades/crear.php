@@ -132,7 +132,7 @@
             if ($resultado) {
                 //REDIRECCIONAR AL USUARIO
 
-                header('Location: /admin'); //header sirve pare redireccionar a un usuario,
+                header('Location: /admin?resultado=1'); //header sirve pare redireccionar a un usuario,
                                             // para enviar datos por enmedio del encabezado 
                                             //de un stio web, de la peticion
             }    
