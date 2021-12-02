@@ -32,5 +32,11 @@
                     </nav>
                 </div>
             </div> <!--Cierre barra-->
+
+            <?php 
+            if ($inicio) {
+                echo "<h1>Venta de casas de Lujo</h1>";
+            }
+            ?>
         </div>
     </header>
