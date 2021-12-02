@@ -1,8 +1,10 @@
 <?php
-    // echo "<pre>";
-    // var_dump($_GET);
-    // echo "</pre>";
-    // exit;
+    require '../includes/funciones.php'; //sirve para funciones  
+    $auth = estaAutenticado();
+
+    if(!$auth) {
+        header('Location: /');
+    }
 
     //IMPORTAR LA CONEXION
     require '../includes/config/database.php';
@@ -43,7 +45,7 @@
     }
 
     //INCLUYE UN TEMPLATE
-    require '../includes/funciones.php'; //sirve para funciones    
+      
     incluirTemplate('header'); 
 ?>
 

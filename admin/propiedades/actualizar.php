@@ -1,5 +1,12 @@
 <?php
 
+    require '../../includes/funciones.php'; //sirve para funciones 
+    $auth = estaAutenticado();
+
+    if(!$auth) {
+        header('Location: /');
+    }
+
     // echo "<pre>";
     // var_dump($_GET);
     // echo "</pre>";
@@ -167,7 +174,7 @@
         }
     }
 
-    require '../../includes/funciones.php'; //sirve para funciones    
+       
     incluirTemplate('header'); 
 ?>
 
